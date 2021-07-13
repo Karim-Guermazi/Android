@@ -1,0 +1,192 @@
+                    
+
+I. Intent explicite passant des informations pour une nouvelle activité
+1/<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_launcher_foreground"
+        tools:layout_editor_absoluteX="151dp"
+        tools:layout_editor_absoluteY="233dp" />
+
+    <EditText
+        android:id="@+id/edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        tools:layout_editor_absoluteX="100dp"
+        tools:layout_editor_absoluteY="364dp" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="159dp"
+        tools:layout_editor_absoluteY="428dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+2/
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:textSize="28dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Bonjour" />
+
+     </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+3/package com.example.myapplication;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Button b1=(Button) findViewById(R.id.button1);
+        EditText t1=(EditText) findViewById(R.id.edit);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(
+                        MainActivity.this,MainActivity2.class);
+                String message=t1.getText().toString();
+                i.putExtra("prenom", message);
+                startActivity(i);
+
+            }
+
+        });
+    }
+}
+
+4/ exécution
+
+
+II. Intents implicites:
+1/<RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rgroup">
+
+            <RadioButton
+                android:id="@+id/contacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Consulter des contacts" />
+
+            <RadioButton
+                android:id="@+id/google"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rechercher sur Google" />
+
+            <RadioButton
+                android:id="@+id/isims"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Localiser l'ISIMS" />
+        </RadioGroup>
+    </LinearLayout>
+2/package com.example.myapplication;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+
+public class MainActivity2 extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+
+
+
+----------------------------------------------------------/*
+
+
+
+        Intent i1=getIntent();
+        String message = i1.getStringExtra("prenom");
+        TextView textView = (TextView) findViewById(R.id.textView);
+        textView.setText(textView.getText() + " " + message);
+        RadioGroup radio=(RadioGroup) findViewById(R.id.rgroup);
+        radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch(radio.getCheckedRadioButtonId()){
+                    
+------------------------------------------------------------*/
+
+
+
+
+                    case R.id.contacts :
+                        String myData = "content://contacts/people/";
+                        Intent i1 = new Intent(Intent.ACTION_VIEW, Uri.parse(myData));
+                        startActivity(i1);
+
+                        break;
+
+
+                    case R.id.google :
+                        String  geoCode ="geo:34.8395406,10.75728760000004";
+                        Intent i2 = new Intent(Intent.ACTION_VIEW, Uri.parse(geoCode));
+                        startActivity(i2);
+                        break;
+
+                    case R.id.isims :
+                        Intent i2 = new Intent(Intent.ACTION_VIEW, Uri.parse(geoCode));
+                        startActivity(i2);
+                        break;
+
+
+
+                }
+            }
+        });
+    }
+}
